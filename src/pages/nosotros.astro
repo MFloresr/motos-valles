@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { getEquipo } from '../lib/contenido';
+import foto from '../assets/fotos/yamaha-mt09-mt07.jpg';
+
+const equipo = await getEquipo();
+const iniciales = (n: string) => n.split(' ').map((p) => p[0]).join('');
+---
+
+<Base titulo="Quiénes somos" descripcion="Un equipo de motoristas que vende, prepara y repara motos. Conoce a quienes te atenderán en la tienda y en el taller.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Quiénes somos</h1>
+    <p>Un concesionario pequeño donde te atiende gente que va en moto. Por eso no te vendemos una que no te encaje.</p>
+  </div>
+  <section class="seccion" style="padding-top:24px">
+    <div class="contenedor dos">
+      <div>
+        <h2>Una tienda, un taller y la misma gente</h2>
+        <p class="texto">Empezamos reparando motos y acabamos vendiéndolas, porque los clientes nos pedían consejo antes de comprar. Hoy tenemos tienda, taller y una sección de ocasión donde cada moto pasa por nuestras manos.</p>
+        <ul class="lista">
+          <li>Te aconsejamos según tu carnet, tu altura y el uso que le vas a dar.</li>
+          <li>Te enseñamos lo que revisamos y lo que cuesta, antes de empezar.</li>
+          <li>Seguimos a tu lado después de la venta, en el taller.</li>
+        </ul>
+      </div>
+      <div class="foto-recta"><Image src={foto} alt="Dos Yamaha naked aparcadas una junto a la otra" widths={[500, 800]} sizes="(min-width: 900px) 45vw, 100vw" /></div>
+    </div>
+  </section>
+  <section class="seccion seccion--tiza">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2>El equipo</h2></div>
+      <div class="equipo">
+        {equipo.map((p) => (
+          <article class="persona">
+            <span class="placa" aria-hidden="true">{iniciales(p.data.nombre)}</span>
+            <h3>{p.data.nombre}</h3>
+            <p class="cargo">{p.data.cargo}</p>
+            <p style="margin:0">{p.data.texto}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

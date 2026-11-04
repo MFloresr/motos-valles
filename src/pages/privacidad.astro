@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { sitio } from '../lib/sitio';
+const r = sitio.responsableLegal;
+---
+
+<Base titulo="Política de privacidad" descripcion="Cómo tratamos tus datos personales cuando nos escribes, pides cita o reservas una prueba." noindex>
+  <div class="contenedor cabecera-pagina"><h1>Política de privacidad</h1></div>
+  <section class="seccion legal" style="padding-top:8px">
+    <div class="contenedor">
+      <p class="aviso aviso--demo" style="max-width:72ch">Plantilla de ejemplo. El cliente y su asesor deben revisarla y completarla antes de publicar, sobre todo si se añade analítica, newsletter o financiación a través de terceros.</p>
+      <h2>Quién es el responsable</h2>
+      <p>{r.razonSocial}, con NIF {r.nif} y domicilio en {r.domicilio}. Puedes escribirnos a <a class="enlace" href={`mailto:${sitio.email}`}>{sitio.email}</a>.</p>
+      <h2>Qué datos tratamos y para qué</h2>
+      <ul class="lista">
+        <li><strong>Formulario de contacto:</strong> nombre, correo, teléfono y mensaje, para responder a tu consulta.</li>
+        <li><strong>Reserva de prueba:</strong> nombre, teléfono, correo, carnet, moto y día, para gestionar la prueba.</li>
+        <li><strong>Cita de taller:</strong> nombre, teléfono, moto, kilómetros y servicio, para organizar la cita.</li>
+      </ul>
+      <h2>Base jurídica</h2>
+      <p>Tu consentimiento, que das al marcar la casilla del formulario, y la aplicación de medidas precontractuales a petición tuya, como una valoración o una cita.</p>
+      <h2>Cuánto tiempo los guardamos</h2>
+      <p>El tiempo necesario para atender tu solicitud y, después, durante los plazos legales que correspondan. [El cliente fija los plazos concretos.]</p>
+      <h2>A quién los comunicamos</h2>
+      <p>No cedemos tus datos a terceros salvo obligación legal. Si contratas una financiación, los datos necesarios se facilitarán a la entidad financiera que elijas. Usamos proveedores de alojamiento y de correo que actúan como encargados del tratamiento. [Indicar proveedores y ubicación.]</p>
+      <h2>Tus derechos</h2>
+      <p>Puedes pedir el acceso, la rectificación, la supresión, la oposición, la limitación y la portabilidad de tus datos escribiéndonos al correo de arriba. Si crees que no los tratamos bien, puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
+    </div>
+  </section>
+</Base>

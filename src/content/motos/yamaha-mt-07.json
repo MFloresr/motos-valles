@@ -1,0 +1,20 @@
+{
+  "marca": "Yamaha",
+  "modelo": "MT-07",
+  "anio": 2026,
+  "tipo": "naked",
+  "estado": "nueva",
+  "cc": 689,
+  "kw": 54,
+  "peso": 184,
+  "asiento": 805,
+  "precio": 8499,
+  "a2": true,
+  "foto": "../../assets/fotos/yamaha-mt07.jpg",
+  "fotoAlt": "Yamaha MT-07 negra con el caballete lateral puesto",
+  "destacada": true,
+  "resumen": "La naked ligera y ágil con la que se aprende casi sin darte cuenta.",
+  "descripcion": "Motor bicilíndrico de 689 cc con mucho par desde abajo, chasis muy ligero y una postura erguida que cansa poco en ciudad. Hay versión limitada a 35 kW para el carnet A2, y se desbloquea en el taller cuando pases al A.",
+  "extras": ["Versión A2 disponible", "ABS", "Pantalla TFT", "Faros y piloto LED"],
+  "garantiaMeses": 24
+}

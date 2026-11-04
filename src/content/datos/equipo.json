@@ -1,0 +1,6 @@
+[
+  { "id": "ramon", "nombre": "Ramon Soler", "cargo": "Jefe de taller", "texto": "Más de veinte años entre llaves. Si algo suena raro, lo oye antes de que lo notes." },
+  { "id": "laia", "nombre": "Laia Pons", "cargo": "Ventas y financiación", "texto": "Te ayuda a elegir moto según tu carnet, tu altura y tu presupuesto, y a calcular la cuota sin letra pequeña." },
+  { "id": "marc", "nombre": "Marc Vidal", "cargo": "Mecánico y pruebas", "texto": "Prepara las motos de ocasión y las prueba en carretera antes de ponerlas a la venta." },
+  { "id": "nuria", "nombre": "Núria Camps", "cargo": "Recambios y equipación", "texto": "Encuentra el recambio que buscas y te prueba el casco hasta que te quede bien." }
+]

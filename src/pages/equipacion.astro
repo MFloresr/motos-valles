@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import foto from '../assets/fotos/equip-casco.jpg';
+
+const categorias = [
+  { nombre: 'Cascos', texto: 'Integrales, modulares, jet y off-road homologados ECE 22.06. Te los probamos hasta que te queden bien.' },
+  { nombre: 'Chaquetas y monos', texto: 'Con protecciones en hombros, codos y espalda. De verano con malla y de invierno con membrana.' },
+  { nombre: 'Guantes', texto: 'Con protección en nudillos y palma. Para ciudad, carretera y lluvia.' },
+  { nombre: 'Botas', texto: 'De caña alta o baja, con refuerzo en tobillo y puntera. Imprescindibles si haces rutas.' },
+  { nombre: 'Pantalones', texto: 'Vaqueros técnicos y pantalones con protecciones, para llevar a diario.' },
+  { nombre: 'Maletas y baúles', texto: 'Cofres, alforjas y bolsas de depósito. Con montaje en el taller.' },
+  { nombre: 'Comunicación', texto: 'Intercomunicadores y soportes para el móvil, bien instalados y sin cables sueltos.' },
+  { nombre: 'Seguridad', texto: 'Candados de disco, cadenas y alarmas para que la moto siga donde la dejaste.' },
+];
+---
+
+<Base titulo="Equipación para moteros" descripcion="Cascos, chaquetas, guantes, botas, maletas y accesorios. Te ayudamos a elegir la talla y te los probamos en tienda.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Equipación</h1>
+    <p>Un casco y unos guantes buenos importan más que cualquier extra. Ven a probártelos, que la talla manda.</p>
+  </div>
+  <section class="seccion" style="padding-top:24px">
+    <div class="contenedor dos dos--desigual" style="align-items:start">
+      <div><h2 class="solo-lectores">Categorías de equipación</h2>
+      <div class="servicios" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))">
+        {categorias.map((c) => <article class="servicio"><h3>{c.nombre}</h3><p style="margin:0">{c.texto}</p></article>)}
+      </div></div>
+      <div>
+        <div class="foto-recta"><Image src={foto} alt="Motorista con casco azul y mono negro junto a su moto" widths={[500, 800]} sizes="(min-width: 900px) 35vw, 100vw" /></div>
+        <h2 style="margin-top:24px">Pruébatelo antes</h2>
+        <p class="texto">Medimos la cabeza, probamos tallas y te dejamos unos minutos con el casco puesto. Si no te convence, lo cambiamos.</p>
+        <a class="btn" href="/contacto/">Pregúntanos por tu talla</a>
+      </div>
+    </div>
+  </section>
+  <section class="cinta"><div class="contenedor"><h2>Con tu moto nueva, equipación con descuento.</h2><a class="btn btn--sec" href="/contacto/?asunto=moto">Pídenos oferta</a></div></section>
+</Base>

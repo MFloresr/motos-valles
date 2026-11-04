@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Formulario from '../components/Formulario.astro';
+import { getMotos } from '../lib/contenido';
+import { nombreMoto, ETIQUETA_ESTADO } from '../lib/util';
+
+const motos = await getMotos();
+const hoy = new Date().toISOString().slice(0, 10);
+---
+
+<Base titulo="Reservar una prueba de moto" descripcion="Reserva una prueba de moto en nuestra tienda. Elige moto, día y hora, y te lo confirmamos.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Reserva una prueba</h1>
+    <p>Elige la moto y el día que te va bien. Te confirmamos la hora y la dejamos preparada.</p>
+  </div>
+  <section class="seccion" style="padding-top:24px">
+    <div class="contenedor dos dos--desigual" style="align-items:start">
+      <Formulario tipo="prueba" boton="Reservar la prueba" mensajeOk="Prueba solicitada. Te confirmamos la hora en el próximo día laborable.">
+        <div class="ancho-total">
+          <label for="p-moto">Moto que quieres probar <span class="marca" aria-hidden="true">*</span></label>
+          <select id="p-moto" name="moto" required>
+            <option value="">Elige una moto</option>
+            {motos.map((m) => <option value={m.id}>{nombreMoto(m.data)} · {ETIQUETA_ESTADO[m.data.estado]}</option>)}
+          </select>
+          <p class="error" data-error-para="moto"></p>
+        </div>
+        <div><label for="p-fecha">Día <span class="marca" aria-hidden="true">*</span></label><input id="p-fecha" name="fecha" type="date" min={hoy} required /><p class="error" data-error-para="fecha"></p></div>
+        <div>
+          <label for="p-hora">Hora aproximada</label>
+          <select id="p-hora" name="hora"><option value="manana">Por la mañana</option><option value="tarde">Por la tarde</option></select>
+        </div>
+        <div>
+          <label for="p-carnet">Mi carnet <span class="marca" aria-hidden="true">*</span></label>
+          <select id="p-carnet" name="carnet" required><option value="">Elige</option><option>B</option><option>A1</option><option>A2</option><option>A</option></select>
+          <p class="error" data-error-para="carnet"></p>
+        </div>
+        <div><label for="p-nombre">Nombre <span class="marca" aria-hidden="true">*</span></label><input id="p-nombre" name="nombre" type="text" autocomplete="name" required /><p class="error" data-error-para="nombre"></p></div>
+        <div><label for="p-tel">Teléfono <span class="marca" aria-hidden="true">*</span></label><input id="p-tel" name="telefono" type="tel" autocomplete="tel" required pattern="[0-9 +]{9,}" title="Escribe un teléfono de al menos 9 cifras" /><p class="error" data-error-para="telefono"></p></div>
+        <div><label for="p-email">Correo</label><input id="p-email" name="email" type="email" autocomplete="email" /></div>
+      </Formulario>
+      <aside>
+        <h2 style="font-size:1.8rem">Qué traer</h2>
+        <ul class="lista">
+          <li>Tu carnet de conducir en vigor</li>
+          <li>Casco, guantes y calzado cerrado. Si no los tienes, te prestamos casco.</li>
+          <li>Un documento de identidad</li>
+        </ul>
+        <p class="gris">La prueba dura unos 20 minutos por un recorrido que ya tenemos preparado. El seguro de la moto de pruebas lo ponemos nosotros.</p>
+      </aside>
+    </div>
+  </section>
+</Base>

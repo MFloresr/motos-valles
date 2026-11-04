@@ -1,0 +1,19 @@
+{
+  "marca": "Kawasaki",
+  "modelo": "Z900",
+  "anio": 2026,
+  "tipo": "naked",
+  "estado": "nueva",
+  "cc": 948,
+  "kw": 92.5,
+  "peso": 212,
+  "asiento": 820,
+  "precio": 9690,
+  "foto": "../../assets/fotos/kawasaki-z900.jpg",
+  "fotoAlt": "Kawasaki Z900 gris oscuro en el escaparate",
+  "destacada": true,
+  "resumen": "Cuatro cilindros, empuje en todo el cuentavueltas y un aspecto que no pasa desapercibido.",
+  "descripcion": "Naked de 948 cc con entrega muy progresiva, así que se disfruta tanto en carretera de montaña como en el día a día. Lleva modos de conducción, control de tracción y una instrumentación fácil de leer.",
+  "extras": ["Modos de conducción", "Control de tracción", "ABS", "Conectividad con el móvil"],
+  "garantiaMeses": 24
+}

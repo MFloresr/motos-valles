@@ -1,0 +1,72 @@
+---
+// "¿Qué moto puedo llevar?": filtra por carnet, tipo y precio y lleva al catálogo con los filtros puestos.
+import { CARNETS, ETIQUETA_TIPO, carnetsPara, type Moto } from '../lib/util';
+
+interface Props { motos: Moto[] }
+const { motos } = Astro.props;
+const resumen = motos.map((m) => ({ tipo: m.data.tipo, precio: m.data.precio, carnets: carnetsPara(m.data) }));
+const maxPrecio = Math.ceil(Math.max(...motos.map((m) => m.data.precio)) / 1000) * 1000;
+const tipos = [...new Set(motos.map((m) => m.data.tipo))];
+---
+
+<form class="buscador" id="buscador" action="/motos/" method="get" data-motos={JSON.stringify(resumen)}>
+  <h2>¿Qué moto puedo llevar?</h2>
+  <p>Elige tu carnet y te enseñamos las que encajan.</p>
+
+  <fieldset class="campo">
+    <legend class="rotulo">Mi carnet</legend>
+    <div class="placas">
+      {CARNETS.map((c, i) => (
+        <label>
+          <input type="radio" name="carnet" value={c.id} checked={c.id === 'A2'} data-ayuda={c.ayuda} />
+          <span class="placa">{c.nombre}</span>
+        </label>
+      ))}
+    </div>
+    <p class="ayuda-carnet" id="ayuda-carnet" aria-live="polite"></p>
+  </fieldset>
+
+  <div class="campo">
+    <label for="b-tipo">Tipo de moto</label>
+    <select id="b-tipo" name="tipo">
+      <option value="">Todos los tipos</option>
+      {tipos.map((t) => <option value={t}>{ETIQUETA_TIPO[t]}</option>)}
+    </select>
+  </div>
+
+  <div class="campo">
+    <div class="rango"><label for="b-precio">Presupuesto máximo</label><output id="b-precio-valor" class="num" for="b-precio"></output></div>
+    <input id="b-precio" name="max" type="range" min="1000" max={maxPrecio} step="500" value={maxPrecio} />
+  </div>
+
+  <button class="btn btn--bloque" type="submit" id="b-enviar">Ver motos</button>
+</form>
+
+<script>
+  const f = document.getElementById('buscador') as HTMLFormElement | null;
+  if (f) {
+    const motos: { tipo: string; precio: number; carnets: string[] }[] = JSON.parse(f.dataset.motos || '[]');
+    const precio = f.querySelector<HTMLInputElement>('#b-precio')!;
+    const salida = f.querySelector<HTMLOutputElement>('#b-precio-valor')!;
+    const ayuda = f.querySelector<HTMLElement>('#ayuda-carnet')!;
+    const boton = f.querySelector<HTMLButtonElement>('#b-enviar')!;
+    const euros = (n: number) => `${new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(n)} €`;
+    const actualizar = () => {
+      const carnet = f.querySelector<HTMLInputElement>('input[name="carnet"]:checked')?.value ?? '';
+      const tipo = (f.querySelector('#b-tipo') as HTMLSelectElement).value;
+      const max = Number(precio.value);
+      salida.textContent = euros(max);
+      ayuda.textContent = f.querySelector<HTMLInputElement>('input[name="carnet"]:checked')?.dataset.ayuda ?? '';
+      const n = motos.filter((m) => m.carnets.includes(carnet) && (!tipo || m.tipo === tipo) && m.precio <= max).length;
+      boton.textContent = n === 0 ? 'Ver el catálogo' : n === 1 ? 'Ver 1 moto' : `Ver ${n} motos`;
+    };
+    f.addEventListener('input', actualizar);
+    actualizar();
+    // Si el presupuesto está al máximo, no se envía como filtro
+    f.addEventListener('submit', () => {
+      if (Number(precio.value) >= Number(precio.max)) precio.disabled = true;
+      const tipo = f.querySelector<HTMLSelectElement>('#b-tipo')!;
+      if (!tipo.value) tipo.disabled = true;
+    });
+  }
+</script>

@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Preguntas from '../components/Preguntas.astro';
+
+const permisos = [
+  { id: 'AM', edad: '15 años', limite: 'Ciclomotores de hasta 50 cc y 45 km/h', nota: 'Es el primer escalón y no sirve para motos de más cilindrada.' },
+  { id: 'A1', edad: '16 años', limite: 'Hasta 125 cc, 11 kW y 0,1 kW por kilo', nota: 'Ideal para empezar con una 125 y ganar experiencia.' },
+  { id: 'A2', edad: '18 años', limite: 'Hasta 35 kW y 0,2 kW por kilo', nota: 'Cubre muchas motos con la versión limitada. Se desbloquean al pasar al A.' },
+  { id: 'A', edad: '20 años con 2 de A2, o 24', limite: 'Sin límite de potencia', nota: 'El permiso completo. Se puede sacar directo desde los 24 años.' },
+];
+---
+
+<Base titulo="Guía de carnets de moto" descripcion="AM, A1, A2 y A: qué moto puedes conducir con cada permiso, desde qué edad, y qué pasa con el carnet B. Orientativo, confirma siempre en la DGT.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Guía de carnets de moto</h1>
+    <p>Los permisos van por escalones. Aquí tienes los límites de cada uno para elegir moto con cabeza.</p>
+  </div>
+  <section class="seccion" style="padding-top:24px" aria-labelledby="t-escalera">
+    <div class="contenedor">
+      <h2 id="t-escalera" class="solo-lectores">Los cuatro permisos</h2>
+      <div class="escalera">
+        {permisos.map((p) => (
+          <article class="escalon">
+            <h3><span class="placa placa--grande">{p.id}</span></h3>
+            <dl>
+              <div><dt>Edad mínima</dt><dd>{p.edad}</dd></div>
+              <div><dt>Qué puedes conducir</dt><dd>{p.limite}</dd></div>
+            </dl>
+            <p class="letra-pequena" style="margin-top:12px">{p.nota}</p>
+            <a class="enlace" href={`/motos/?carnet=${p.id}`}>Ver motos para el {p.id}</a>
+          </article>
+        ))}
+      </div>
+      <p class="letra-pequena" style="margin-top:20px">Información orientativa. Los requisitos pueden cambiar: confírmalos en la DGT o en tu autoescuela.</p>
+    </div>
+  </section>
+
+  <section class="seccion seccion--tiza">
+    <div class="contenedor dos dos--desigual" style="align-items:start">
+      <div>
+        <h2>¿Y con el carnet de coche?</h2>
+        <p class="texto">Con el permiso B y tres años de antigüedad puedes conducir motos de hasta 125 cc y 11 kW. Sirve para la ciudad y desplazamientos cortos, pero no para una moto de mayor cilindrada.</p>
+        <a class="btn" href="/motos/?carnet=B">Ver motos para el carnet B</a>
+      </div>
+      <Preguntas tema="carnet" titulo="Dudas sobre carnets" />
+    </div>
+  </section>
+</Base>

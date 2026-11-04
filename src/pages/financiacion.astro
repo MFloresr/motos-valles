@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Preguntas from '../components/Preguntas.astro';
+import { getMotos } from '../lib/contenido';
+import { sitio } from '../lib/sitio';
+import { nombreMoto } from '../lib/util';
+
+const motos = await getMotos();
+const lista = motos.map((m) => ({ id: m.id, nombre: `${nombreMoto(m.data)} (${m.data.anio})`, precio: m.data.precio }));
+const { tin, plazoMin, plazoMax } = sitio.financiacion;
+---
+
+<Base titulo="Calculadora de financiación" descripcion="Calcula la cuota mensual de tu moto según el importe, la entrada y el plazo. Cálculo orientativo, sujeto a aprobación de la financiera.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Calcula tu cuota</h1>
+    <p>Elige una moto o escribe un importe y mira cuánto pagarías al mes. Es una estimación para hacerte una idea.</p>
+  </div>
+  <section class="seccion" style="padding-top:24px">
+    <div class="contenedor calculadora" id="calculadora" data-tin={tin} data-motos={JSON.stringify(lista)}>
+      <form class="formulario" onsubmit="return false" aria-label="Datos de la financiación">
+        <div class="campo">
+          <label for="k-moto">Moto</label>
+          <select id="k-moto"><option value="">Otro importe</option>{lista.map((m) => <option value={m.id}>{m.nombre}</option>)}</select>
+        </div>
+        <div class="campo">
+          <label for="k-precio">Precio de la moto (€)</label>
+          <input id="k-precio" type="number" min="500" step="50" value="9000" inputmode="numeric" />
+        </div>
+        <div class="campo">
+          <div class="rango"><label for="k-entrada">Entrada</label><output id="k-entrada-v" class="num" for="k-entrada"></output></div>
+          <input id="k-entrada" type="range" min="0" max="50" step="5" value="10" />
+        </div>
+        <div class="campo">
+          <div class="rango"><label for="k-plazo">Plazo</label><output id="k-plazo-v" class="num" for="k-plazo"></output></div>
+          <input id="k-plazo" type="range" min={plazoMin} max={plazoMax} step="6" value="60" />
+        </div>
+        <p class="letra-pequena">Cálculo con un TIN de ejemplo del {tin} %. La oferta real depende de la financiera, del importe y de tu perfil.</p>
+      </form>
+
+      <div class="resultado" aria-live="polite">
+        <p style="margin:0;color:#b5bdc2">Tu cuota estimada</p>
+        <p class="grande num" id="k-cuota">0 €</p>
+        <p style="margin:0;color:#b5bdc2">al mes</p>
+        <dl>
+          <div><dt>Importe a financiar</dt><dd id="k-fin">0 €</dd></div>
+          <div><dt>Entrada</dt><dd id="k-ent">0 €</dd></div>
+          <div><dt>Total de intereses</dt><dd id="k-int">0 €</dd></div>
+          <div><dt>Total a pagar</dt><dd id="k-tot">0 €</dd></div>
+        </dl>
+        <p style="margin:20px 0 0"><a class="btn btn--claro btn--bloque" href="/contacto/?asunto=financiacion">Quiero que me lo estudiéis</a></p>
+        <p class="letra-pequena" style="margin-top:14px">Información orientativa, sin valor contractual y sujeta a la aprobación de la entidad financiera.</p>
+      </div>
+    </div>
+  </section>
+  <section class="seccion seccion--tiza"><div class="contenedor"><Preguntas tema="financiacion" titulo="Sobre la financiación" /></div></section>
+</Base>
+
+<script>
+  const c = document.getElementById('calculadora');
+  if (c) {
+    const motos: { id: string; precio: number }[] = JSON.parse(c.dataset.motos || '[]');
+    const tin = Number(c.dataset.tin);
+    const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+    const eur = (n: number) => `${new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(Math.round(n))} €`;
+    const moto = $<HTMLSelectElement>('k-moto'), precio = $<HTMLInputElement>('k-precio'), entrada = $<HTMLInputElement>('k-entrada'), plazo = $<HTMLInputElement>('k-plazo');
+    const q = new URLSearchParams(location.search);
+    if (q.get('precio')) precio.value = q.get('precio')!;
+    const calcular = () => {
+      const p = Math.max(0, Number(precio.value) || 0);
+      const ent = p * (Number(entrada.value) / 100);
+      const fin = p - ent;
+      const n = Number(plazo.value);
+      const i = tin / 100 / 12;
+      const cuota = fin <= 0 ? 0 : i === 0 ? fin / n : (fin * i) / (1 - Math.pow(1 + i, -n));
+      $('k-entrada-v').textContent = `${entrada.value} %`;
+      $('k-plazo-v').textContent = `${plazo.value} meses`;
+      $('k-cuota').textContent = eur(cuota);
+      $('k-fin').textContent = eur(fin);
+      $('k-ent').textContent = eur(ent);
+      $('k-int').textContent = eur(cuota * n - fin);
+      $('k-tot').textContent = eur(cuota * n + ent);
+    };
+    moto.addEventListener('change', () => { const m = motos.find((x) => x.id === moto.value); if (m) precio.value = String(m.precio); calcular(); });
+    [precio, entrada, plazo].forEach((e) => e.addEventListener('input', calcular));
+    calcular();
+  }
+</script>

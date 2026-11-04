@@ -1,0 +1,20 @@
+{
+  "marca": "BMW",
+  "modelo": "F 850 GS Adventure",
+  "anio": 2020,
+  "tipo": "trail",
+  "estado": "ocasion",
+  "cc": 853,
+  "kw": 70,
+  "peso": 244,
+  "asiento": 875,
+  "precio": 11900,
+  "km": 21400,
+  "foto": "../../assets/fotos/bmw-f850gs.jpg",
+  "fotoAlt": "BMW F 850 GS Adventure con protecciones y neumáticos de tacos",
+  "destacada": false,
+  "resumen": "Trail de viaje bien equipada, revisada y con el libro de mantenimiento al día.",
+  "descripcion": "Un solo propietario, siempre mantenida en servicio oficial. Lleva protecciones tubulares, soportes de maletas y neumáticos mixtos con vida de sobra.",
+  "extras": ["Un solo propietario", "Libro de mantenimiento", "Protecciones tubulares", "Neumáticos mixtos"],
+  "garantiaMeses": 12
+}

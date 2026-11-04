@@ -1,0 +1,162 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Buscador from '../components/Buscador.astro';
+import MotoCard from '../components/MotoCard.astro';
+import AbiertoAhora from '../components/AbiertoAhora.astro';
+import { getMotos, getMotosNuevas, getMotosOcasion, getEntradas, getOpiniones } from '../lib/contenido';
+import { sitio } from '../lib/sitio';
+import { ETIQUETA_TIPO } from '../lib/util';
+import hero from '../assets/fotos/glacier.jpg';
+import taller from '../assets/fotos/taller-motor.jpg';
+
+const todas = await getMotos();
+const nuevas = (await getMotosNuevas()).slice(0, 3);
+const ocasion = (await getMotosOcasion()).slice(0, 4);
+const entradas = (await getEntradas()).slice(0, 3);
+const opiniones = await getOpiniones();
+const tipos = Object.entries(
+  todas.reduce<Record<string, number>>((acc, m) => ({ ...acc, [m.data.tipo]: (acc[m.data.tipo] ?? 0) + 1 }), {}),
+);
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'MotorcycleDealer',
+  name: sitio.nombre,
+  description: sitio.descripcion,
+  url: sitio.url,
+  telephone: sitio.telefono,
+  email: sitio.email,
+  address: { '@type': 'PostalAddress', streetAddress: sitio.direccion.calle, postalCode: sitio.direccion.cp, addressLocality: sitio.direccion.ciudad, addressRegion: sitio.direccion.provincia, addressCountry: 'ES' },
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '19:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '10:00', closes: '14:00' },
+  ],
+};
+---
+
+<Base titulo="Concesionario multimarca, ocasión y taller de motos" jsonld={jsonld}>
+  <section class="hero" aria-labelledby="titulo-hero">
+    <div class="hero__foto"><Image src={hero} alt="" widths={[800, 1280, 1920]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
+    <div class="contenedor hero__fila">
+      <div class="hero__texto">
+        <h1 id="titulo-hero">Tu próxima moto, sin dar vueltas.</h1>
+        <p>Motos nuevas y de ocasión, taller propio y equipación. Dinos qué carnet tienes y te enseñamos solo las que puedes llevar.</p>
+        <div class="hero__acciones">
+          <a class="btn" href="/motos/">Ver motos nuevas</a>
+          <a class="btn btn--borde-claro" href="/ocasion/">Motos de ocasión</a>
+        </div>
+      </div>
+      <Buscador motos={todas} />
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-tipos">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 id="t-tipos">Busca por tipo de moto</h2><p>Naked, trail, custom, scooter y clásicas. Todas revisadas y listas para rodar.</p></div>
+      <div class="tipos">
+        {tipos.map(([t, n]) => (
+          <a class="tipo" href={`/motos/?tipo=${t}`}>
+            <span>{ETIQUETA_TIPO[t]}</span><small>{n} {n === 1 ? 'moto' : 'motos'}</small>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--tiza" aria-labelledby="t-nuevas">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 id="t-nuevas">Motos nuevas</h2><a class="enlace" href="/motos/">Ver todas las nuevas</a></div>
+      <div class="rejilla">{nuevas.map((m) => <MotoCard moto={m} />)}</div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-ocasion">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 id="t-ocasion">Ocasión con revisión de 40 puntos</h2><p>Con informe por escrito y garantía. Si no te lo enseñamos, no la vendemos.</p></div>
+      <div class="rejilla">{ocasion.map((m) => <MotoCard moto={m} />)}</div>
+      <p style="margin-top:24px"><a class="btn btn--sec" href="/ocasion/">Ver todas las de ocasión</a></p>
+    </div>
+  </section>
+
+  <section class="seccion seccion--oscura" aria-labelledby="t-taller">
+    <div class="contenedor dos dos--desigual">
+      <div>
+        <h2 id="t-taller">Taller propio, con precio antes de empezar.</h2>
+        <p class="texto gris">Revisiones, neumáticos, frenos, transmisión y diagnosis. Te damos el presupuesto antes de tocar nada y te avisamos si aparece algo más.</p>
+        <ul class="lista">
+          <li>Cita online en un minuto</li>
+          <li>Recambios de calidad y sellado en el libro</li>
+          <li>Moto de cortesía en reparaciones largas</li>
+        </ul>
+        <a class="btn btn--claro" href="/taller/">Ver servicios y precios</a>
+      </div>
+      <div class="foto-recta"><Image src={taller} alt="Mecánico trabajando en el motor de una moto, con herramientas a su alrededor" widths={[500, 800, 1100]} sizes="(min-width: 900px) 45vw, 100vw" /></div>
+    </div>
+  </section>
+
+  <section class="cinta" aria-labelledby="t-prueba">
+    <div class="contenedor">
+      <h2 id="t-prueba">¿Te la quieres probar? Reserva y te esperamos.</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn" href="/prueba/">Reservar una prueba</a>
+        <a class="btn btn--sec" href="/financiacion/">Calcular mi cuota</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-opiniones">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 id="t-opiniones">Lo que cuentan los clientes</h2></div>
+      <div class="opiniones">
+        {opiniones.map((o) => (
+          <figure class="opinion">
+            <blockquote>“{o.data.texto}”</blockquote>
+            <figcaption><strong>{o.data.nombre}</strong>{o.data.moto}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--tiza" aria-labelledby="t-blog">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2 id="t-blog">Para entender de motos</h2><a class="enlace" href="/blog/">Ver todos los artículos</a></div>
+      <div class="entradas">
+        {entradas.map((e) => (
+          <article class="entrada">
+            <Image src={e.data.foto} alt={e.data.fotoAlt} widths={[400, 700]} sizes="(min-width: 960px) 30vw, 100vw" />
+            <div class="entrada__cuerpo">
+              <p class="entrada__meta">{e.data.categoria} · {e.data.minutos} min de lectura</p>
+              <h3><a href={`/blog/${e.id}/`}>{e.data.titulo}</a></h3>
+              <p>{e.data.resumen}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-donde">
+    <div class="contenedor dos">
+      <div>
+        <h2 id="t-donde">Pásate por la tienda</h2>
+        <p><AbiertoAhora /></p>
+        <p>{sitio.direccion.calle}<br />{sitio.direccion.cp} {sitio.direccion.ciudad} ({sitio.direccion.provincia})</p>
+        <p>Teléfono: <a class="enlace" href={`tel:${sitio.telefono}`}>{sitio.telefonoVisible}</a></p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/contacto/">Cómo llegar</a><a class="btn btn--sec" href={`https://wa.me/${sitio.whatsapp}`}>Escríbenos por WhatsApp</a></div>
+      </div>
+      <div class="tabla-envoltorio">
+        <table>
+          <caption class="solo-lectores">Horario de la tienda y el taller</caption>
+          <thead><tr><th scope="col">Día</th><th scope="col">Horario</th></tr></thead>
+          <tbody>
+            {sitio.horarios.map((h) => (
+              <tr><th scope="row">{h.etiqueta}</th><td class="num">{h.tramos.length ? h.tramos.map((t) => `${t.abre} a ${t.cierra}`).join(' y ') : 'Cerrado'}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</Base>

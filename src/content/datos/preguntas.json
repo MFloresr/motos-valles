@@ -1,0 +1,10 @@
+[
+  { "id": "q1", "tema": "carnet", "pregunta": "¿Qué moto puedo llevar con el carnet B?", "respuesta": "Si llevas tres años con el carnet B puedes conducir motos de hasta 125 cc y 11 kW en España. Antes de ese tiempo necesitas el A1. Comprueba tu caso en la DGT o con nosotros." },
+  { "id": "q2", "tema": "carnet", "pregunta": "¿Qué es una moto limitada a A2?", "respuesta": "Es la versión de una moto con la potencia reducida a 35 kW o menos, la que puedes llevar con el carnet A2. Cuando pases al carnet A, se puede desbloquear en el taller." },
+  { "id": "q3", "tema": "compra", "pregunta": "¿Puedo probar la moto antes de comprarla?", "respuesta": "Sí. Reserva una prueba desde la web o llámanos. Trae el carnet, casco y guantes; si no los tienes, te prestamos casco." },
+  { "id": "q4", "tema": "ocasion", "pregunta": "¿Qué garantía tienen las motos de ocasión?", "respuesta": "Todas llevan la garantía legal mínima de 12 meses y pasan por una revisión de 40 puntos en nuestro taller. El informe se entrega con la moto." },
+  { "id": "q5", "tema": "ocasion", "pregunta": "¿Cogéis mi moto a cambio?", "respuesta": "Valoramos tu moto sin compromiso. Si compras otra con nosotros, se descuenta del precio. Llévala al taller o envíanos fotos y kilómetros." },
+  { "id": "q6", "tema": "financiacion", "pregunta": "¿Puedo financiar una moto de ocasión?", "respuesta": "Sí, hasta cierta antigüedad. La cuota depende del importe, la entrada, el plazo y lo que apruebe la financiera. Usa la calculadora para hacerte una idea." },
+  { "id": "q7", "tema": "taller", "pregunta": "¿Necesito cita para el taller?", "respuesta": "Para revisiones y neumáticos sí, así te damos hora y no esperas. Para una urgencia, llámanos y miramos cómo encajarla." },
+  { "id": "q8", "tema": "taller", "pregunta": "¿Se mantiene la garantía si reviso la moto en vuestro taller?", "respuesta": "Sí. Hacemos el mantenimiento con la periodicidad y los recambios que pide el fabricante y lo sellamos en el libro." }
+]

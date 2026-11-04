@@ -1,0 +1,20 @@
+{
+  "marca": "Honda",
+  "modelo": "PCX 150",
+  "anio": 2012,
+  "tipo": "scooter",
+  "estado": "ocasion",
+  "cc": 153,
+  "kw": 11,
+  "peso": 130,
+  "asiento": 764,
+  "precio": 1950,
+  "km": 14200,
+  "foto": "../../assets/fotos/honda-pcx.jpg",
+  "fotoAlt": "Honda PCX 150 gris en la calle",
+  "destacada": false,
+  "resumen": "Scooter de ciudad económica, con cofre bajo el asiento y poco gasto.",
+  "descripcion": "Perfecta para moverse a diario. Cambio automático, arranque Stop and Start y espacio para un casco integral bajo el asiento.",
+  "extras": ["Arranque Stop and Start", "Cofre bajo el asiento", "Correa de transmisión nueva"],
+  "garantiaMeses": 12
+}

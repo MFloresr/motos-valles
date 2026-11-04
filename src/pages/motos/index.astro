@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import Catalogo from '../../components/Catalogo.astro';
+import { getMotosNuevas } from '../../lib/contenido';
+
+const motos = await getMotosNuevas();
+---
+
+<Base titulo="Motos nuevas" descripcion="Catálogo de motos nuevas: naked, trail, custom y más. Filtra por carnet, tipo y precio y reserva tu prueba.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Motos nuevas</h1>
+    <p>Filtra por tu carnet y te enseñamos solo las que puedes conducir. Todas con garantía y entrega preparada.</p>
+  </div>
+  <section class="seccion" style="padding-top:16px">
+    <div class="contenedor"><Catalogo motos={motos} estados={['nueva', 'km0']} /></div>
+  </section>
+</Base>

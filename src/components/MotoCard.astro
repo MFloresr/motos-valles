@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import { carnetMinimo, carnetsPara, cuota, euros, km, nombreMoto, unidad, ETIQUETA_ESTADO, ETIQUETA_TIPO, type Moto } from '../lib/util';
+import { sitio } from '../lib/sitio';
+
+interface Props { moto: Moto; prioridad?: boolean }
+const { moto, prioridad = false } = Astro.props;
+const d = moto.data;
+const carnets = carnetsPara(d);
+const mensual = cuota(d.precio * 0.9, 60, sitio.financiacion.tin);
+---
+
+<article
+  class="tarjeta"
+  data-moto
+  data-tipo={d.tipo}
+  data-marca={d.marca}
+  data-estado={d.estado}
+  data-precio={d.precio}
+  data-carnets={carnets.join(' ')}
+  data-anio={d.anio}
+  data-km={d.km ?? 0}
+>
+  <div class="tarjeta__foto">
+    <Image src={d.foto} alt={d.fotoAlt} widths={[360, 600, 800]} sizes="(min-width: 960px) 30vw, 100vw" loading={prioridad ? 'eager' : 'lazy'} />
+    <div class="tarjeta__marca">
+      <span class={`etiqueta ${d.estado === 'nueva' ? 'etiqueta--rojo' : ''}`}>{ETIQUETA_ESTADO[d.estado]}</span>
+      {d.precioAnterior && <span class="etiqueta etiqueta--rojo">Rebajada</span>}
+    </div>
+  </div>
+  <div class="tarjeta__cuerpo">
+    <h3 class="tarjeta__titulo"><a href={`/motos/${moto.id}/`}>{nombreMoto(d)}</a></h3>
+    <p class="tarjeta__datos num">
+      {ETIQUETA_TIPO[d.tipo]} · {d.anio}{d.cc ? ` · ${unidad(d.cc, 'cc')}` : ' · Eléctrica'} · {unidad(d.kw, 'kW')}{d.km !== undefined ? ` · ${km(d.km)}` : ''}
+    </p>
+    <div class="tarjeta__pie">
+      <div class="precio num">
+        {d.precioAnterior && <s>{euros(d.precioAnterior)}</s>}{euros(d.precio)}
+        <small>o {euros(mensual)}/mes</small>
+      </div>
+      <span class="placa" title={`Se puede conducir con el carnet ${carnetMinimo(d)} o superior`}>{carnetMinimo(d)}</span>
+    </div>
+  </div>
+</article>

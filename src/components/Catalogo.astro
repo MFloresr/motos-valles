@@ -1,0 +1,148 @@
+---
+// Listado con filtros que funcionan en el navegador y se guardan en la dirección (?tipo=naked&carnet=A2).
+import MotoCard from './MotoCard.astro';
+import { CARNETS, ETIQUETA_TIPO, ETIQUETA_ESTADO, type Moto } from '../lib/util';
+
+interface Props { motos: Moto[]; estados?: string[] }
+const { motos, estados = [] } = Astro.props;
+const tipos = [...new Set(motos.map((m) => m.data.tipo))];
+const marcas = [...new Set(motos.map((m) => m.data.marca))].sort();
+const maxPrecio = Math.ceil(Math.max(...motos.map((m) => m.data.precio)) / 500) * 500;
+---
+
+<div class="catalogo" id="catalogo">
+  <button type="button" class="btn btn--sec filtros-toggle" aria-expanded="false" aria-controls="filtros">Filtros</button>
+  <form class="filtros" id="filtros" aria-label="Filtros del catálogo" onsubmit="return false">
+    <h2>Filtrar</h2>
+
+    <fieldset class="campo">
+      <legend class="rotulo">Mi carnet</legend>
+      <div class="placas">
+        <label><input type="radio" name="carnet" value="" checked /><span class="placa">Todos</span></label>
+        {CARNETS.map((c) => <label><input type="radio" name="carnet" value={c.id} /><span class="placa">{c.nombre}</span></label>)}
+      </div>
+    </fieldset>
+
+    <fieldset class="campo">
+      <legend class="rotulo">Tipo</legend>
+      {tipos.map((t) => <label class="check"><input type="checkbox" name="tipo" value={t} />{ETIQUETA_TIPO[t]}</label>)}
+    </fieldset>
+
+    <div class="campo">
+      <label for="f-marca">Marca</label>
+      <select id="f-marca" name="marca">
+        <option value="">Todas</option>
+        {marcas.map((m) => <option value={m}>{m}</option>)}
+      </select>
+    </div>
+
+    {estados.length > 1 && (
+      <fieldset class="campo">
+        <legend class="rotulo">Estado</legend>
+        {estados.map((e) => <label class="check"><input type="checkbox" name="estado" value={e} />{ETIQUETA_ESTADO[e]}</label>)}
+      </fieldset>
+    )}
+
+    <div class="campo">
+      <div class="rango"><label for="f-precio">Precio máximo</label><output id="f-precio-valor" class="num" for="f-precio"></output></div>
+      <input id="f-precio" name="max" type="range" min="1000" max={maxPrecio} step="500" value={maxPrecio} />
+    </div>
+
+    <button type="reset" class="btn btn--sec btn--peq btn--bloque" id="f-limpiar">Quitar filtros</button>
+  </form>
+
+  <div>
+    <div class="barra-resultados">
+      <p id="resultados" role="status" aria-live="polite" style="margin:0;font-weight:700"></p>
+      <div>
+        <label for="f-orden" class="solo-lectores">Ordenar por</label>
+        <select id="f-orden" name="orden">
+          <option value="recomendado">Orden recomendado</option>
+          <option value="precio-asc">Precio: de menor a mayor</option>
+          <option value="precio-desc">Precio: de mayor a menor</option>
+          <option value="anio-desc">Más recientes primero</option>
+          <option value="km-asc">Menos kilómetros</option>
+        </select>
+      </div>
+    </div>
+    <h2 class="solo-lectores">Listado de motos</h2>
+    <div class="rejilla" id="lista">
+      {motos.map((m, i) => <MotoCard moto={m} prioridad={i < 3} />)}
+    </div>
+    <div class="vacio" id="vacio" hidden>
+      <h3>Ninguna moto con esos filtros</h3>
+      <p>Prueba con un presupuesto mayor o quita algún filtro. Si buscas algo concreto, avísanos y te lo buscamos.</p>
+      <a class="btn" href="/contacto/">Encárganos tu moto</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const raiz = document.getElementById('catalogo');
+  if (raiz) {
+    const form = document.getElementById('filtros') as HTMLFormElement;
+    const lista = document.getElementById('lista')!;
+    const tarjetas = [...lista.querySelectorAll<HTMLElement>('[data-moto]')];
+    const orden = document.getElementById('f-orden') as HTMLSelectElement;
+    const precio = document.getElementById('f-precio') as HTMLInputElement;
+    const precioValor = document.getElementById('f-precio-valor')!;
+    const resultados = document.getElementById('resultados')!;
+    const vacio = document.getElementById('vacio')!;
+    const euros = (n: number) => `${new Intl.NumberFormat('es-ES', { useGrouping: 'always' }).format(n)} €`;
+    const marcados = (n: string) => [...form.querySelectorAll<HTMLInputElement>(`input[name="${n}"]:checked`)].map((i) => i.value);
+
+    // Estado inicial desde la dirección
+    const q = new URLSearchParams(location.search);
+    q.getAll('tipo').forEach((t) => (form.querySelector<HTMLInputElement>(`input[name="tipo"][value="${t}"]`)!.checked = true));
+    q.getAll('estado').forEach((t) => { const i = form.querySelector<HTMLInputElement>(`input[name="estado"][value="${t}"]`); if (i) i.checked = true; });
+    const c = q.get('carnet'); if (c) { const i = form.querySelector<HTMLInputElement>(`input[name="carnet"][value="${c}"]`); if (i) i.checked = true; }
+    if (q.get('marca')) (form.elements.namedItem('marca') as HTMLSelectElement).value = q.get('marca')!;
+    if (q.get('max')) precio.value = q.get('max')!;
+    if (q.get('orden')) orden.value = q.get('orden')!;
+
+    const aplicar = () => {
+      const carnet = form.querySelector<HTMLInputElement>('input[name="carnet"]:checked')?.value ?? '';
+      const tipos = marcados('tipo'), estados = marcados('estado');
+      const marca = (form.elements.namedItem('marca') as HTMLSelectElement).value;
+      const max = Number(precio.value);
+      precioValor.textContent = euros(max);
+      let visibles = 0;
+      for (const t of tarjetas) {
+        const ok =
+          (!carnet || t.dataset.carnets!.split(' ').includes(carnet)) &&
+          (!tipos.length || tipos.includes(t.dataset.tipo!)) &&
+          (!estados.length || estados.includes(t.dataset.estado!)) &&
+          (!marca || t.dataset.marca === marca) &&
+          Number(t.dataset.precio) <= max;
+        t.hidden = !ok;
+        if (ok) visibles++;
+      }
+      const k = orden.value;
+      if (k !== 'recomendado') {
+        const val = (t: HTMLElement) => Number(k.startsWith('precio') ? t.dataset.precio : k.startsWith('anio') ? t.dataset.anio : t.dataset.km);
+        [...tarjetas].sort((a, b) => (k.endsWith('desc') ? val(b) - val(a) : val(a) - val(b))).forEach((t) => lista.appendChild(t));
+      } else tarjetas.forEach((t) => lista.appendChild(t));
+      resultados.textContent = visibles === 1 ? '1 moto' : `${visibles} motos`;
+      vacio.hidden = visibles !== 0;
+      // Guardar en la dirección
+      const p = new URLSearchParams();
+      if (carnet) p.set('carnet', carnet);
+      tipos.forEach((t) => p.append('tipo', t));
+      estados.forEach((t) => p.append('estado', t));
+      if (marca) p.set('marca', marca);
+      if (max < Number(precio.max)) p.set('max', String(max));
+      if (k !== 'recomendado') p.set('orden', k);
+      history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
+    };
+    form.addEventListener('input', aplicar);
+    form.addEventListener('reset', () => setTimeout(aplicar));
+    orden.addEventListener('change', aplicar);
+    const toggle = raiz.querySelector<HTMLButtonElement>('.filtros-toggle')!;
+    const movil = window.matchMedia('(max-width: 959px)');
+    const ajustar = () => { form.hidden = movil.matches && toggle.getAttribute('aria-expanded') !== 'true'; };
+    toggle.addEventListener('click', () => { toggle.setAttribute('aria-expanded', String(toggle.getAttribute('aria-expanded') !== 'true')); ajustar(); });
+    movil.addEventListener('change', ajustar);
+    ajustar();
+    aplicar();
+  }
+</script>

@@ -1,0 +1,5 @@
+[
+  { "id": "o1", "nombre": "David", "moto": "Compró una moto de ocasión", "texto": "Me explicaron qué revisaban en cada moto y me enseñaron el informe. Salí con la mía y con la garantía por escrito." },
+  { "id": "o2", "nombre": "Anna", "moto": "Sacó el carnet A2", "texto": "Me ayudaron a elegir una moto que no me viniera grande. Al año me la cambiaron sin dramas." },
+  { "id": "o3", "nombre": "Jordi", "moto": "Revisión en el taller", "texto": "Presupuesto claro antes de tocar nada y me avisaron de lo que podía esperar. Eso se agradece." }
+]

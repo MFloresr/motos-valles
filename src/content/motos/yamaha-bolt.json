@@ -1,0 +1,20 @@
+{
+  "marca": "Yamaha",
+  "modelo": "XV950 Bolt",
+  "anio": 2017,
+  "tipo": "custom",
+  "estado": "ocasion",
+  "cc": 942,
+  "kw": 40,
+  "peso": 252,
+  "asiento": 690,
+  "precio": 6490,
+  "km": 9800,
+  "foto": "../../assets/fotos/yamaha-bolt.jpg",
+  "fotoAlt": "Yamaha Bolt negra sobre una tarima de exposición",
+  "destacada": false,
+  "resumen": "Custom de asiento bajo y manejo fácil, con carácter de sobra.",
+  "descripcion": "Bicilíndrica en V con transmisión por correa, que no necesita engrase. Con 690 mm de altura de asiento, llegan al suelo casi todos los pilotos.",
+  "extras": ["Transmisión por correa", "Asiento a 690 mm", "ABS"],
+  "garantiaMeses": 12
+}

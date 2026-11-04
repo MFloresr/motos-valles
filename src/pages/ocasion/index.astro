@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import Catalogo from '../../components/Catalogo.astro';
+import Preguntas from '../../components/Preguntas.astro';
+import { getMotosOcasion } from '../../lib/contenido';
+
+const motos = await getMotosOcasion();
+---
+
+<Base titulo="Motos de ocasión" descripcion="Motos de ocasión revisadas en nuestro taller, con informe de 40 puntos y garantía. Clásicas, trail, naked, scooter y eléctricas.">
+  <div class="contenedor cabecera-pagina">
+    <h1>Motos de ocasión</h1>
+    <p>Cada moto pasa por una revisión de 40 puntos y se entrega con el informe, el libro de mantenimiento y la garantía por escrito.</p>
+  </div>
+  <section class="seccion" style="padding-top:16px">
+    <div class="contenedor"><Catalogo motos={motos} /></div>
+  </section>
+  <section class="seccion seccion--tiza">
+    <div class="contenedor"><div class="dos dos--desigual" style="align-items:start">
+      <div>
+        <h2>¿Quieres vender o cambiar la tuya?</h2>
+        <p class="texto">Valoramos tu moto sin compromiso. Si compras otra con nosotros, el importe se descuenta del precio. Envíanos fotos, año y kilómetros, o pásate por la tienda.</p>
+        <a class="btn" href="/contacto/?asunto=valoracion">Pedir una valoración</a>
+      </div>
+      <Preguntas tema="ocasion" titulo="Sobre la ocasión" />
+    </div></div>
+  </section>
+</Base>

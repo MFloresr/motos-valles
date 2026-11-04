@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import MotoCard from '../../components/MotoCard.astro';
+import { getMotos, getRelacionadas } from '../../lib/contenido';
+import { sitio } from '../../lib/sitio';
+import { carnetsPara, cuota, cv, euros, km, nombreMoto, unidad, ETIQUETA_ESTADO, ETIQUETA_TIPO } from '../../lib/util';
+
+export async function getStaticPaths() {
+  const motos = await getMotos();
+  return motos.map((moto) => ({ params: { slug: moto.id }, props: { moto } }));
+}
+
+const { moto } = Astro.props;
+const d = moto.data;
+const relacionadas = await getRelacionadas(moto);
+const carnets = carnetsPara(d);
+const mensual = cuota(d.precio * 0.9, 60, sitio.financiacion.tin);
+const listado = d.estado === 'ocasion' ? { href: '/ocasion/', texto: 'Ocasión' } : { href: '/motos/', texto: 'Motos nuevas' };
+
+const filas: [string, string][] = [
+  ['Marca y modelo', nombreMoto(d)],
+  ['Año', String(d.anio)],
+  ['Tipo', ETIQUETA_TIPO[d.tipo]],
+  ['Cilindrada', d.cc ? unidad(d.cc, 'cc') : 'Eléctrica'],
+  ['Potencia', `${unidad(d.kw, 'kW')} (${cv(d.kw)} CV)`],
+  ['Peso', unidad(d.peso, 'kg')],
+  ['Altura del asiento', unidad(d.asiento, 'mm')],
+  ...(d.km !== undefined ? ([['Kilómetros', km(d.km)]] as [string, string][]) : []),
+  ['Garantía', `${d.garantiaMeses} meses`],
+];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: nombreMoto(d),
+  description: d.resumen,
+  brand: { '@type': 'Brand', name: d.marca },
+  category: 'Motocicleta',
+  itemCondition: d.estado === 'ocasion' ? 'https://schema.org/UsedCondition' : 'https://schema.org/NewCondition',
+  offers: { '@type': 'Offer', priceCurrency: 'EUR', price: d.precio, availability: 'https://schema.org/InStock', seller: { '@type': 'Organization', name: sitio.nombre } },
+};
+---
+
+<Base titulo={`${nombreMoto(d)} ${d.anio}`} descripcion={`${nombreMoto(d)} ${ETIQUETA_ESTADO[d.estado].toLowerCase()} por ${euros(d.precio)}. ${d.resumen}`} jsonld={jsonld}>
+  <div class="contenedor">
+    <nav class="migas" aria-label="Migas de pan"><a href="/">Inicio</a> / <a href={listado.href}>{listado.texto}</a> / <span aria-current="page">{nombreMoto(d)}</span></nav>
+    <div class="ficha-moto">
+      <div>
+        <div class="ficha-moto__foto">
+          <Image src={d.foto} alt={d.fotoAlt} widths={[640, 960, 1400]} sizes="(min-width: 960px) 58vw, 100vw" loading="eager" fetchpriority="high" />
+        </div>
+        <div style="margin-top:32px">
+          <h2>Cómo es</h2>
+          <p class="texto">{d.descripcion}</p>
+          {d.extras.length > 0 && (<><h3>Equipamiento y extras</h3><ul class="lista">{d.extras.map((e) => <li>{e}</li>)}</ul></>)}
+        </div>
+        <div style="margin-top:32px">
+          <h2>Ficha técnica</h2>
+          <dl class="ficha">{filas.map(([a, b]) => <div><dt>{a}</dt><dd>{b}</dd></div>)}</dl>
+        </div>
+      </div>
+
+      <aside class="ficha-moto__lateral" aria-label="Precio y acciones">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <span class={`etiqueta ${d.estado === 'nueva' ? 'etiqueta--rojo' : ''}`}>{ETIQUETA_ESTADO[d.estado]}</span>
+          <span class="etiqueta">{ETIQUETA_TIPO[d.tipo]}</span>
+        </div>
+        <h1>{nombreMoto(d)}</h1>
+        <p class="gris" style="margin:0">{d.resumen}</p>
+        <p class="ficha-moto__precio num">{d.precioAnterior && <s style="font-size:1.4rem;color:var(--gris);margin-right:8px">{euros(d.precioAnterior)}</s>}{euros(d.precio)}</p>
+        <p class="ficha-moto__cuota num">Desde {euros(mensual)} al mes (60 meses, con el 10 % de entrada). <a class="enlace" href={`/financiacion/?precio=${d.precio}`}>Calcula la tuya</a></p>
+        <div class="ficha-moto__acciones">
+          <a class="btn" href={`/prueba/?moto=${moto.id}`}>Reservar una prueba</a>
+          <a class="btn btn--sec" href={`/contacto/?asunto=moto&moto=${moto.id}`}>Preguntar por esta moto</a>
+          <a class="btn btn--sec" href={`tel:${sitio.telefono}`}>Llamar: {sitio.telefonoVisible}</a>
+        </div>
+        <h2 style="font-size:1.4rem;margin-top:20px">¿Con qué carnet se conduce?</h2>
+        <div class="carnets-moto">{carnets.map((c) => <span class="placa">{c}</span>)}</div>
+        <p class="letra-pequena" style="margin:0">
+          {d.a2 && 'Disponible limitada a 35 kW para el carnet A2. '}
+          {carnets.includes('A2') ? 'Cumple los límites del carnet A2.' : 'Necesitas el carnet A.'}
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="cabecera-seccion"><h2>Otras que pueden interesarte</h2></div>
+      <div class="rejilla">{relacionadas.map((m) => <MotoCard moto={m} />)}</div>
+    </div>
+  </section>
+</Base>

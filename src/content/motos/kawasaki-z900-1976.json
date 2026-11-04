@@ -1,0 +1,20 @@
+{
+  "marca": "Kawasaki",
+  "modelo": "Z900 (1976)",
+  "anio": 1976,
+  "tipo": "clasica",
+  "estado": "ocasion",
+  "cc": 903,
+  "kw": 60,
+  "peso": 230,
+  "asiento": 820,
+  "precio": 11400,
+  "km": 36500,
+  "foto": "../../assets/fotos/ocasion-z900-1976.jpg",
+  "fotoAlt": "Kawasaki Z900 azul de 1976 expuesta en un encuentro de clásicas",
+  "destacada": false,
+  "resumen": "La Z de los setenta, en azul y con el tubo de escape cromado.",
+  "descripcion": "Una de las motos japonesas clásicas más buscadas. Revisión mecánica completa, cromados cuidados y arranque a la primera.",
+  "extras": ["Revisión mecánica completa", "Cromados cuidados", "Documentación en regla"],
+  "garantiaMeses": 12
+}

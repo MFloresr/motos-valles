@@ -1,0 +1,19 @@
+{
+  "marca": "BMW",
+  "modelo": "R 1300 GS Adventure",
+  "anio": 2025,
+  "tipo": "trail",
+  "estado": "nueva",
+  "cc": 1300,
+  "kw": 108,
+  "peso": 269,
+  "asiento": 890,
+  "precio": 24350,
+  "foto": "../../assets/fotos/bmw-r1300gs.jpg",
+  "fotoAlt": "BMW R 1300 GS Adventure con maletas laterales sobre adoquín",
+  "destacada": true,
+  "resumen": "La gran trail para viajar lejos, con maletas y depósito de sobra.",
+  "descripcion": "Bicilíndrico bóxer de 1.300 cc, protección contra el viento muy trabajada y equipamiento pensado para etapas largas. Es alta y pesada, así que te la probamos con calma para ver si te encaja.",
+  "extras": ["Maletas laterales", "Protectores de motor", "Suspensión electrónica", "Puños calefactables"],
+  "garantiaMeses": 36
+}

@@ -1,0 +1,20 @@
+{
+  "marca": "Yamaha",
+  "modelo": "MT-09 Tracer",
+  "anio": 2016,
+  "tipo": "sport-touring",
+  "estado": "ocasion",
+  "cc": 847,
+  "kw": 85,
+  "peso": 210,
+  "asiento": 850,
+  "precio": 7200,
+  "km": 18900,
+  "foto": "../../assets/fotos/yamaha-tracer.jpg",
+  "fotoAlt": "Yamaha MT-09 Tracer plateada con maleta superior",
+  "destacada": false,
+  "resumen": "Para salir de ruta los domingos y para ir a trabajar el lunes.",
+  "descripcion": "Tricilíndrica con carenado, pantalla regulable y baúl trasero. Cómoda para dos y con un consumo contenido.",
+  "extras": ["Baúl trasero", "Pantalla regulable", "ABS", "Control de tracción"],
+  "garantiaMeses": 12
+}

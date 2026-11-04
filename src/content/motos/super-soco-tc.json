@@ -1,0 +1,20 @@
+{
+  "marca": "Super Soco",
+  "modelo": "TC",
+  "anio": 2022,
+  "tipo": "electrica",
+  "estado": "ocasion",
+  "cc": null,
+  "kw": 1.9,
+  "peso": 95,
+  "asiento": 740,
+  "precio": 2390,
+  "km": 3100,
+  "foto": "../../assets/fotos/electrica.jpg",
+  "fotoAlt": "Moto eléctrica retro Super Soco TC de color arena aparcada en la calle",
+  "destacada": false,
+  "resumen": "Eléctrica de aire retro para la ciudad: silenciosa y sin gasolineras.",
+  "descripcion": "Con 3.100 km y la batería revisada, que mantiene buena capacidad. Se carga en un enchufe normal y es muy ligera para maniobrar.",
+  "extras": ["Batería revisada", "Cargador incluido", "Sin gasolina"],
+  "garantiaMeses": 12
+}

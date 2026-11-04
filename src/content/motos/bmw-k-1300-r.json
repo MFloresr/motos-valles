@@ -1,0 +1,21 @@
+{
+  "marca": "BMW",
+  "modelo": "K 1300 R",
+  "anio": 2013,
+  "tipo": "naked",
+  "estado": "ocasion",
+  "cc": 1293,
+  "kw": 118,
+  "peso": 217,
+  "asiento": 820,
+  "precio": 6900,
+  "precioAnterior": 7400,
+  "km": 24500,
+  "foto": "../../assets/fotos/bmw-k1300r.jpg",
+  "fotoAlt": "BMW K 1300 R vista de lado sobre fondo blanco",
+  "destacada": false,
+  "resumen": "Cuatro cilindros en línea, 160 CV y pocos kilómetros para su edad.",
+  "descripcion": "Una de las nakeds más contundentes de su época. Revisión completa hecha en nuestro taller, neumáticos y frenos recién cambiados.",
+  "extras": ["Frenos y neumáticos nuevos", "ABS", "Revisión de 40 puntos"],
+  "garantiaMeses": 12
+}

@@ -1,0 +1,20 @@
+{
+  "marca": "Honda",
+  "modelo": "CB 750 Four",
+  "anio": 1975,
+  "tipo": "clasica",
+  "estado": "ocasion",
+  "cc": 736,
+  "kw": 49,
+  "peso": 230,
+  "asiento": 810,
+  "precio": 9800,
+  "km": 41000,
+  "foto": "../../assets/fotos/ocasion-cb750.jpg",
+  "fotoAlt": "Honda CB 750 Four naranja de los años setenta, en campo abierto",
+  "destacada": false,
+  "resumen": "La clásica de los cuatro tubos de escape, conservada y funcionando.",
+  "descripcion": "Una moto histórica que se sigue conduciendo. Pintura original restaurada, motor revisado y documentación en regla. Se vende para disfrutarla, no para dejarla en un garaje.",
+  "extras": ["Motor revisado", "Pintura restaurada", "Documentación en regla"],
+  "garantiaMeses": 12
+}
